@@ -3,14 +3,13 @@
 #include <time.h>
 #include <stdlib.h>
 #define _CRT_SECURE_NO_WARNINGS
-
-SoundID sound1;
+SoundID sound1,sound2;
 SceneID scene1;
 ObjectID startButton, endButton,nextButton;
 TimerID timer5;
 int r_num,endscenenum=2;
 int gameNum=0;
-// 게임 설명 만들기, 사운드 끄고 키는 기능
+// , 사운드 끄고 키는 기능
 
 /////////////////////////////////////////////////////////// Pong HAU K'I 
 ObjectID CirR1, CirR2, CirB1, CirB2, CirB, CirR, Turn;
@@ -331,6 +330,7 @@ void setall() {
 }
 void clickrightNum(ObjectID object1,ObjectID object2,int i) {
 	if (object1 == object2) {
+		playSound(sound2);
 		if (num1 == i) {
 			num1++;
 			hideObject(object2);
@@ -367,6 +367,7 @@ void endNumber() {
 
 void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
 	if (object == startButton) { 
+		playSound(sound2);
 		if (gameNum == 0) {
 			BCNIO();
 		}
@@ -378,6 +379,7 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
 		}
 	}
 	if (object == nextButton) {
+		playSound(sound2);
 		if (gameNum == 0) {
 			startNumber();
 		}
@@ -399,16 +401,19 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
 		}
 	}
 	if (object == endButton) {
+		playSound(sound2);
 		endGame();
 	}
 	if (PongOn) {
 		if (Bturn) {
 			if (object == CirB1) {
+				playSound(sound2);
 				movePong(CirB1, B1X, B1Y);
 				Bturn = false;
 				setObjectImage(Turn, "images/RTurn.png");
 			}
 			else if (object == CirB2) {
+				playSound(sound2);
 				movePong(CirB2, B2X, B2Y);
 				Bturn = false;
 				setObjectImage(Turn, "images/RTurn.png");
@@ -416,11 +421,13 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
 		}
 		else {
 			if (object == CirR1) {
+				playSound(sound2);
 				movePong(CirR1, R1X, R1Y);
 				Bturn = true;
 				setObjectImage(Turn, "images/BTurn.png");
 			}
 			else if (object == CirR2) {
+				playSound(sound2);
 				movePong(CirR2, R2X, R2Y);
 				Bturn = true;
 				setObjectImage(Turn, "images/BTurn.png");
@@ -534,6 +541,7 @@ void timerCallback(TimerID timer)
 		}
 	}
 	if (timer == timer5) {
+		stopSound(sound1);
 		char end[20];
 		if (P1W == 2 && P2W == 1) sprintf_s(end, 20, "images/p21%d.jpg", endscenenum);
 		else if (P1W == 1 && P2W == 2) sprintf_s(end, 20, "images/p12%d.jpg", endscenenum);
@@ -553,8 +561,9 @@ void timerCallback(TimerID timer)
 
 
 int main() {
-	sound1 = createSound("sounds/I.mp3");
-	playSound(sound1);
+	sound1 = createSound("sounds/main.mp3");
+	sound2 = createSound("sounds/button.mp3");
+	playSound(sound1,1);
 	setTimerCallback(timerCallback);
 	srand(time(NULL));
 	setGameOption(GameOption::GAME_OPTION_ROOM_TITLE, false);
