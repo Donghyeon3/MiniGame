@@ -3,13 +3,12 @@
 #include <time.h>
 #include <stdlib.h>
 #define _CRT_SECURE_NO_WARNINGS
-SoundID sound1,sound2;
+SoundID sound1,sound2,sound3,sound4;
 SceneID scene1;
 ObjectID startButton, endButton,nextButton;
 TimerID timer5;
 int r_num,endscenenum=2;
 int gameNum=0;
-// , 사운드 끄고 키는 기능
 
 /////////////////////////////////////////////////////////// Pong HAU K'I 
 ObjectID CirR1, CirR2, CirB1, CirB2, CirB, CirR, Turn;
@@ -367,8 +366,10 @@ void endNumber() {
 
 void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
 	if (object == startButton) { 
+		stopSound(sound1);
 		playSound(sound2);
 		if (gameNum == 0) {
+			playSound(sound3,1);
 			BCNIO();
 		}
 		if (gameNum == 1) {
@@ -390,6 +391,8 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
 			startPong();
 		}
 		if (gameNum == 3) {
+			stopSound(sound3);
+			playSound(sound4, 1);
 			timer5 = createTimer(0.1f);
 			hideObject(nextButton);
 			startTimer(timer5);
@@ -541,7 +544,6 @@ void timerCallback(TimerID timer)
 		}
 	}
 	if (timer == timer5) {
-		stopSound(sound1);
 		char end[20];
 		if (P1W == 2 && P2W == 1) sprintf_s(end, 20, "images/p21%d.jpg", endscenenum);
 		else if (P1W == 1 && P2W == 2) sprintf_s(end, 20, "images/p12%d.jpg", endscenenum);
@@ -563,6 +565,8 @@ void timerCallback(TimerID timer)
 int main() {
 	sound1 = createSound("sounds/main.mp3");
 	sound2 = createSound("sounds/button.mp3");
+	sound3 = createSound("sounds/play.mp3");
+	sound4 = createSound("sounds/end.mp3");
 	playSound(sound1,1);
 	setTimerCallback(timerCallback);
 	srand(time(NULL));
