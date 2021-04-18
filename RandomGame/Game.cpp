@@ -3,6 +3,7 @@
 #include <time.h>
 #include <stdlib.h>
 #define _CRT_SECURE_NO_WARNINGS
+
 SoundID sound1,sound2,sound3,sound4;
 SceneID scene1;
 ObjectID startButton, endButton,nextButton;
@@ -18,12 +19,12 @@ bool Bturn = true;
 int PongXY[2][3] = { {1,0,1},{1,1} };
 int B1X = 120, B2X = 1050, B1Y = 460, B2Y = 460;
 int R1X = 120, R2X = 1050, R1Y = 20, R2Y = 20;
-void BPong() {
+void BPong() {   // 게임 설명
 	setSceneImage(scene1, "images/BPong.png");
 	hideObject(startButton);
 	showObject(nextButton);
 }
-void endPong() {
+void endPong() { //게임 종료
 	hideObject(CirB1);
 	hideObject(CirB2);
 	hideObject(CirR1);
@@ -34,7 +35,7 @@ void endPong() {
 	showObject(nextButton);
 	gameNum++;
 }
-void Pongwin() {
+void Pongwin() { //승패 판정
 	endPong();
 	if (r_num == 0) {
 		if (Bturn) {
@@ -58,7 +59,7 @@ void Pongwin() {
 	}
 	PongOn = false;
 }
-void startPong() {
+void startPong() { //게임 시작
 	r_num = rand() % 2;
 	PongOn = true;
 	setSceneImage(scene1, "images/Pong.png");
@@ -99,7 +100,7 @@ void startPong() {
 	showObject(CirB);
 	hideObject(nextButton);
 }
-void movePong(ObjectID object, int X, int Y) {
+void movePong(ObjectID object, int X, int Y) { //토큰을 움직이는 함수
 	if (X == 120 && Y == 460) { //왼쪽위
 		PongXY[0][0] = 0;
 		if (PongXY[0][1] == 0) {
@@ -217,12 +218,12 @@ float speed = 3, car1dx = 0, car2dx = 0;
 bool raceOn = false;
 int typeSignal;
 float signalTime;
-void BRace() {
+void BRace() { // 게임 설명
 	setSceneImage(scene1, "images/BRace.png");
 	hideObject(startButton);
 	showObject(nextButton);
 }
-void startRace() {
+void startRace() { // 게임 시작
 	raceOn = true;
 	signalTime = (rand() % 3) + 1;
 	typeSignal = rand() % 2;
@@ -275,7 +276,7 @@ void startRace() {
 	setSceneImage(scene1, "images/Racing.png");
 	hideObject(nextButton);
 }
-void keyboardCallback(KeyCode code, KeyState state)
+void keyboardCallback(KeyCode code, KeyState state) // 키보드 조작
 {
 	if (code == KeyCode::KEY_D) {			
 		car1dx += (state == KeyState::KEY_PRESSED ? speed : -speed);
@@ -284,7 +285,7 @@ void keyboardCallback(KeyCode code, KeyState state)
 		car2dx += (state == KeyState::KEY_PRESSED ? speed : -speed);
 	}
 }
-void endRace() {
+void endRace() { // 게임 종료
 	raceOn = false;
 	stopTimer(timer1);
 	stopTimer(timer2);
@@ -305,18 +306,18 @@ void endRace() {
 //////////////////////////////////////////////////////////////////////// Click Number
 ObjectID one, two, three, four, five, six, seven, eight, nine;
 TimerID timer4;
-int num1 = 1;
+int num1 = 1; 
 bool NumberOn = false;
 bool P1turn = true;
-float scale1, t,p1t,p2t;
+float scale1, t, p1t, p2t;
 int nx, ny;
-void BCNIO() {
+void BCNIO() { //게임 설명
 	setSceneImage(scene1, "images/BCNIO.png");
 	hideObject(startButton);
 	locateObject(endButton, scene1, 1170, 680);
 	showObject(nextButton);
-} //// scale1 이 0되는지 점검 ****
-void setNum(ObjectID object) {
+} 
+void setNum(ObjectID object) { //숫자의 크기, 위치 설정
 	scale1 = (float)((rand() % 10) + 1) / 10;
 	nx = rand() % (int)(1280 - 512 * scale1);
 	ny = rand() % (int)(720 - 512 * scale1);
@@ -324,10 +325,10 @@ void setNum(ObjectID object) {
 	locateObject(object, scene1, nx, ny);
 	showObject(object);
 }
-void setall() {
+void setall() { //모든 숫자 설정
 	setNum(nine); setNum(eight); setNum(seven); setNum(six); setNum(five); setNum(four); setNum(three); setNum(two); setNum(one);
 }
-void clickrightNum(ObjectID object1,ObjectID object2,int i) {
+void clickrightNum(ObjectID object1,ObjectID object2,int i) { // 올바르게 클릭하고 있는지 체크
 	if (object1 == object2) {
 		playSound(sound2);
 		if (num1 == i) {
@@ -340,7 +341,7 @@ void clickrightNum(ObjectID object1,ObjectID object2,int i) {
 		}
 	}
 }
-void startNumber() {
+void startNumber() { // 게임 시작
 	t = 0;
 	timer4 = createTimer(0.1f);
 	startTimer(timer4); 
@@ -358,7 +359,7 @@ void startNumber() {
 	nine = createObject("images/9.png");
 	setall();
 }
-void endNumber() {
+void endNumber() { // 게임 종료
 	gameNum++;
 	showObject(startButton);
 }
@@ -381,16 +382,16 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
 	}
 	if (object == nextButton) {
 		playSound(sound2);
-		if (gameNum == 0) {
+		if (gameNum == 0) { //1번째 게임
 			startNumber();
 		}
-		if (gameNum == 1) {
+		if (gameNum == 1) { //2번째 게임
 			startRace();
 		}
-		if (gameNum == 2) {
+		if (gameNum == 2) { //3번째 게임
 			startPong();
 		}
-		if (gameNum == 3) {
+		if (gameNum == 3) { // 점수화면
 			stopSound(sound3);
 			playSound(sound4, 1);
 			timer5 = createTimer(0.1f);
@@ -407,7 +408,7 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
 		playSound(sound2);
 		endGame();
 	}
-	if (PongOn) {
+	if (PongOn) { // 3번째 게임 마우스 이벤트
 		if (Bturn) {
 			if (object == CirB1) {
 				playSound(sound2);
@@ -437,7 +438,7 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
 			}
 		}
 	}
-	if (NumberOn) {
+	if (NumberOn) { // 1번째 게임 마우스 이벤트
 		clickrightNum(object, one, 1); clickrightNum(object, two, 2); clickrightNum(object, three, 3); clickrightNum(object, four, 4); clickrightNum(object, five, 5); clickrightNum(object, six, 6); clickrightNum(object, seven, 7); clickrightNum(object, eight, 8); clickrightNum(object, nine, 9);
 		if (num1 == 10) {
 			if (P1turn) {
@@ -476,18 +477,18 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
 }
 void timerCallback(TimerID timer)
 {
-	if (raceOn) {
+	if (raceOn) { // 2번째 게임 타이머 이벤트
 		if (timer == timer1) {
 			car1X += car1dx;
 			locateObject(car1, scene1, car1X, car1Y);
 			setTimer(timer1, 0.01f);
 			startTimer(timer1);
-			if (car1dx > 0 && typeSignal == 1) {
+			if (car1dx > 0 && typeSignal == 1) { //승패 판정
 				showMessage("Player 1 moved on the red light!\nPlayer 2 Win\nClick Startbutton To Play Next Game");
 				P2W++;
 				endRace();
 			}
-			if (car1X > 15 + 1070) {
+			if (car1X > 15 + 1070) { //승패판정
 				showMessage("Player 1 Win\nClick Startbutton To Play Next Game");
 				P1W++;
 				endRace();
@@ -498,18 +499,18 @@ void timerCallback(TimerID timer)
 			locateObject(car2, scene1, car2X, car2Y);
 			setTimer(timer2, 0.01f);
 			startTimer(timer2);
-			if (car2dx > 0 && typeSignal == 1) {
+			if (car2dx > 0 && typeSignal == 1) { //승패판정
 				showMessage("Player 2 moved on the red light!\nPlayer 1 Win\nClick Startbutton To Play Next Game");
 				P1W++;
 				endRace();
 			}
-			if (car2X > 10 + 1070) {
+			if (car2X > 10 + 1070) { //승패판정
 				showMessage("Player 2 Win\nClick Startbutton To Play Next Game");
 				P2W++;
 				endRace();
 			}
 		}
-		else if (timer == timer3) {
+		else if (timer == timer3) { // 신호등 시간 랜덤 설정
 			signalTime = (rand() % 4) + 1;
 			if (typeSignal == 0) {
 				showObject(red);
@@ -536,14 +537,14 @@ void timerCallback(TimerID timer)
 			startTimer(timer3);
 		}
 	}
-	if (NumberOn) {
+	if (NumberOn) { //1번째 게임 타이머 이벤트
 		if(timer == timer4){
 			t+=0.1;
 			setTimer(timer4, 0.1f);
 			startTimer(timer4);
 		}
 	}
-	if (timer == timer5) {
+	if (timer == timer5) { // 점수화면 타이머 이벤트
 		char end[20];
 		if (P1W == 2 && P2W == 1) sprintf_s(end, 20, "images/p21%d.jpg", endscenenum);
 		else if (P1W == 1 && P2W == 2) sprintf_s(end, 20, "images/p12%d.jpg", endscenenum);
